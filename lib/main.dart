@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:instagrams_flutter/responsive/mobile_screen_layout.dart';
+import 'package:instagrams_flutter/responsive/responsive_layout.dart';
+import 'package:instagrams_flutter/responsive/web_screen_layout.dart';
 import 'package:instagrams_flutter/utils/colors.dart';
 
 void main() {
@@ -16,10 +19,9 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: mobileBackgroundColor,
         ),
         debugShowCheckedModeBanner: false,
-        home: const Scaffold(
-          body: Center(
-            child: Text("Lets build instagram"),
-          ),
+        home: const ResponsiveLayout(
+          mobileScreenLayout: MobileScreenLayout(),
+          webScreenLayout: WebScreenlayout(),
         ));
   }
 }
