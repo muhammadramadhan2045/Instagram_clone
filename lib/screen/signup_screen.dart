@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagrams_flutter/resources/auth_method.dart';
 import 'package:instagrams_flutter/utils/colors.dart';
+import 'package:instagrams_flutter/utils/utils.dart';
 import 'package:instagrams_flutter/widgets/text_field_input.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -15,6 +19,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController sandiController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
+  Uint8List? _image;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -24,6 +30,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
     sandiController.dispose();
     bioController.dispose();
     usernameController.dispose();
+  }
+
+  void selectImage() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+  }
+
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().signUpUser(
+      email: emailController.text,
+      sandi: sandiController.text,
+      username: usernameController.text,
+      bio: bioController.text,
+      file: _image!,
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (res != 'success') {
+      showSnackBar(res, context);
+    }
   }
 
   @override
@@ -52,16 +86,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
               //circular widget untuk menerima dan show selected file
               Stack(
                 children: [
-                  const CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage(
-                        'https://images.unsplash.com/photo-1461800919507-79b16743b257?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'),
-                  ),
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 64,
+                          backgroundImage: MemoryImage(_image!),
+                        )
+                      : const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                              'https://as2.ftcdn.net/v2/jpg/00/64/67/63/500_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'),
+                        ),
                   Positioned(
                     bottom: -10,
                     left: 80,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: selectImage,
                       icon: const Icon(Icons.add_a_photo_rounded),
                     ),
                   )
@@ -70,7 +109,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 24),
               //text field for username
               TextFieldInput(
-                textEditingController: emailController,
+                textEditingController: usernameController,
                 hintText: 'Masukan Username mu',
                 textInputType: TextInputType.emailAddress,
               ),
@@ -98,7 +137,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               //text field for bio
               TextFieldInput(
-                textEditingController: emailController,
+                textEditingController: bioController,
                 hintText: 'Masukan bio',
                 textInputType: TextInputType.emailAddress,
               ),
@@ -107,11 +146,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               //button login
               InkWell(
+                onTap: signUpUser,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: const Text("Login"),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2, color: primaryColor),
+                        )
+                      : const Text("Register"),
                   decoration: const ShapeDecoration(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
@@ -121,7 +166,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     color: blueColor,
                   ),
                 ),
-                onTap: () {},
               ),
 
               const SizedBox(
