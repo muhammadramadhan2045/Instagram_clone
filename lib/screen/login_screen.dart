@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagrams_flutter/resources/auth_method.dart';
 import 'package:instagrams_flutter/screen/home_screen.dart';
+import 'package:instagrams_flutter/screen/signup_screen.dart';
 import 'package:instagrams_flutter/utils/colors.dart';
 import 'package:instagrams_flutter/utils/utils.dart';
 import 'package:instagrams_flutter/widgets/text_field_input.dart';
@@ -45,6 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  void navigateToSignUp() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const SignUpScreen()));
   }
 
   @override
@@ -132,6 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   GestureDetector(
+                    onTap: navigateToSignUp,
                     child: Container(
                       child: const Text(
                         "Daftar",
@@ -141,7 +148,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    onTap: () {},
                   ),
                 ],
               )
