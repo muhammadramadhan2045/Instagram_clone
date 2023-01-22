@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagrams_flutter/resources/auth_method.dart';
-import 'package:instagrams_flutter/screen/home_screen.dart';
+import 'package:instagrams_flutter/responsive/mobile_screen_layout.dart';
+import 'package:instagrams_flutter/responsive/responsive_layout.dart';
+import 'package:instagrams_flutter/responsive/web_screen_layout.dart';
 import 'package:instagrams_flutter/screen/signup_screen.dart';
 import 'package:instagrams_flutter/utils/colors.dart';
 import 'package:instagrams_flutter/utils/utils.dart';
@@ -37,8 +39,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (res == "success") {
       //navigate to homescreen
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => const ResponsiveLayout(
+          webScreenLayout: WebScreenlayout(),
+          mobileScreenLayout: MobileScreenLayout(),
+        ),
+      ));
     } else {
       //
       showSnackBar(res, context);
