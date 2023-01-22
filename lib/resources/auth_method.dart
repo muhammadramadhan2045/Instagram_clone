@@ -59,4 +59,37 @@ class AuthMethods {
     // }
     return res;
   }
+
+  //logging in user
+  Future<String> loginUser({
+    required String email,
+    required String sandi,
+  }) async {
+    String res = "Beberapa error terjadi";
+
+    try {
+      if (email.isNotEmpty || sandi.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(email: email, password: sandi);
+        res = "success";
+      } else {
+        res = "Please enter al the fields";
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        res = "user not found";
+      } else if (e.code == 'wrong-password') {
+        res = "password is wrong";
+      } else if (e.code == 'too-many-requests') {
+        res = "too many request";
+      } else {
+        res = "disconnected";
+      }
+    }
+
+    // catch (e) {
+    //   res = e.toString();
+    //   print(e.toString());
+    // }
+    return res;
+  }
 }

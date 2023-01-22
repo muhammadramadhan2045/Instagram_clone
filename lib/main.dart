@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
       debugShowCheckedModeBanner: false,
-      home: const SignUpScreen(),
+      home: const LoginScreen(),
     );
   }
 }

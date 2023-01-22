@@ -1,6 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagrams_flutter/resources/auth_method.dart';
+import 'package:instagrams_flutter/screen/home_screen.dart';
 import 'package:instagrams_flutter/utils/colors.dart';
+import 'package:instagrams_flutter/utils/utils.dart';
 import 'package:instagrams_flutter/widgets/text_field_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,13 +18,33 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController sandiController = TextEditingController();
-
+  bool _isLoading = false;
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     emailController.dispose();
     sandiController.dispose();
+  }
+
+  void loginUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods()
+        .loginUser(email: emailController.text, sandi: sandiController.text);
+
+    if (res == "success") {
+      //navigate to homescreen
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeScreen()));
+    } else {
+      //
+      showSnackBar(res, context);
+    }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -67,11 +92,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
               //button login
               InkWell(
+                onTap: loginUser,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: const Text("Login"),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: primaryColor,
+                          ),
+                        )
+                      : const Text("Login"),
                   decoration: const ShapeDecoration(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
@@ -81,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: blueColor,
                   ),
                 ),
-                onTap: () {},
               ),
 
               const SizedBox(
