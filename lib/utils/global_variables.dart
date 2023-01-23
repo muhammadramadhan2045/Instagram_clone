@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:instagrams_flutter/screen/add_post_screen.dart';
+import 'package:instagrams_flutter/screen/feed_screen.dart';
 
 const webScreenSize = 600;
 
 const homeScreenItems = [
-  const Center(
-    child: Text("Rama"),
-  ),
+  FeedScreen(),
   const Center(
     child: Text("Aulia"),
   ),
