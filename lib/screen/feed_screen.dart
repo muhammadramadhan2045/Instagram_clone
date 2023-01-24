@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagrams_flutter/screen/post_card.dart';
+import 'package:instagrams_flutter/widgets/post_card.dart';
 import 'package:instagrams_flutter/utils/colors.dart';
 
 class FeedScreen extends StatelessWidget {
