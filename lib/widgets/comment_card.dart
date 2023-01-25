@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CommentCard extends StatefulWidget {
-  const CommentCard({super.key});
+  final snap;
+  const CommentCard({super.key, required this.snap});
 
   @override
   State<CommentCard> createState() => _CommentCardState();
@@ -17,8 +19,7 @@ class _CommentCardState extends State<CommentCard> {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://images.unsplash.com/photo-1674507887562-ff0183e867ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyM3x8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'),
+            backgroundImage: NetworkImage(widget.snap['profPic']),
             radius: 18,
           ),
           Expanded(
@@ -32,11 +33,17 @@ class _CommentCardState extends State<CommentCard> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'username',
+                          text: widget.snap['name'],
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
                         TextSpan(
-                          text: 'Ini Komen saya sejak tahun 2011',
+                          text: widget.snap['text'],
                         ),
                       ],
                     ),
@@ -44,7 +51,8 @@ class _CommentCardState extends State<CommentCard> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      '24 Januari 2011',
+                      DateFormat.yMMMEd()
+                          .format(widget.snap['datePublished'].toDate()),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
