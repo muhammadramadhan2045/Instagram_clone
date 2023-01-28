@@ -76,7 +76,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             body: ListView(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding:
+                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
                   child: Column(
                     children: [
                       Row(
